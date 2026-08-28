@@ -271,6 +271,7 @@ npm run qa:a11y      # axe-core (WCAG 2.1 A/AA) em 9 rotas
 npm run qa:contrast  # lista pares de cor que reprovam em contraste
 npm run qa:visual <url> <saida.png> <largura> <altura>
 npm run qa:nojs <dir>  # confere se o conteúdo aparece sem JavaScript
+npm run qa:sections <dir>  # captura cada seção da home, para auditoria visual
 ```
 
 `qa:visual` também reporta overflow horizontal e erros de console.
