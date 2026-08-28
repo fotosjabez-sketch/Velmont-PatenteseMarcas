@@ -10,7 +10,8 @@
     "type-check": "tsc --noEmit",
     "qa:a11y": "node scripts/a11y.mjs",
     "qa:visual": "node scripts/visual-qa.mjs",
-    "qa:contrast": "node scripts/contrast.mjs"
+    "qa:contrast": "node scripts/contrast.mjs",
+    "qa:nojs": "node scripts/nojs.mjs"
   },
   "dependencies": {
     "next": "16.3.3",

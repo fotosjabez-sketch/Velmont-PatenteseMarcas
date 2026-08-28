@@ -258,12 +258,14 @@ npm run dev          # em um terminal
 npm run qa:a11y      # axe-core (WCAG 2.1 A/AA) em 9 rotas
 npm run qa:contrast  # lista pares de cor que reprovam em contraste
 npm run qa:visual <url> <saida.png> <largura> <altura>
+npm run qa:nojs <dir>  # confere se o conteúdo aparece sem JavaScript
 ```
 
 `qa:visual` também reporta overflow horizontal e erros de console.
 
-Estado atual: **0 violações WCAG 2.1 AA** nas nove rotas auditadas e **0 overflow
-horizontal** em 390 / 768 / 1024 / 1440 px.
+Estado atual: **0 violações WCAG 2.1 AA** nas nove rotas auditadas, **0 overflow
+horizontal** em 390 / 768 / 1024 / 1440 px e **conteúdo integralmente visível sem
+JavaScript** (o reveal é revertido por `<noscript>`).
 
 ---
 

@@ -90,6 +90,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt-BR" className={`${cormorant.variable} ${archivo.variable}`}>
       <body className="min-h-dvh antialiased">
+        {/* Os blocos com reveal começam invisíveis e são ativados por
+            IntersectionObserver. Sem JavaScript não haveria quem os revelasse,
+            então o conteúdo entra visível e sem transição. */}
+        <noscript>
+          <style>{`
+            [data-reveal] {
+              opacity: 1 !important;
+              transform: none !important;
+              clip-path: none !important;
+              transition: none !important;
+            }
+            .line-mask > span { transform: none !important; }
+            .draw-path { stroke-dashoffset: 0 !important; }
+          `}</style>
+        </noscript>
         <script
           type="application/ld+json"
           // Dados estruturados institucionais — apenas informação oficial.
