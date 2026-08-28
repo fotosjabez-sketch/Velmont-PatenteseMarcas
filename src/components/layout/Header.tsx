@@ -55,10 +55,10 @@ export function Header() {
       <header
         className={cn(
           "fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter,border-color,height] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]",
-          scrolled
+          scrolled && !open
             ? "border-b border-ink-900/8 bg-cream-50/92 backdrop-blur-md"
             : "border-b border-transparent",
-          overDark ? "text-cream-200" : "text-ink-900",
+          overDark || open ? "text-cream-200" : "text-ink-900",
         )}
         style={{ height: scrolled ? "4.25rem" : "var(--header-h)" }}
       >
@@ -116,7 +116,7 @@ export function Header() {
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="menu-principal"
-              className="relative z-[60] -mr-2 flex h-11 w-11 items-center justify-center lg:hidden"
+              className="-mr-2 flex h-11 w-11 items-center justify-center lg:hidden"
             >
               <span className="sr-only">{open ? "Fechar menu" : "Abrir menu"}</span>
               <span aria-hidden="true" className="flex w-6 flex-col gap-[5px]">
@@ -149,7 +149,7 @@ export function Header() {
         id="menu-principal"
         hidden={!open}
         className={cn(
-          "fixed inset-0 z-[55] bg-wine-900 text-cream-200 lg:hidden",
+          "fixed inset-0 z-40 bg-wine-900 text-cream-200 lg:hidden",
           open ? "pointer-events-auto" : "pointer-events-none",
         )}
       >

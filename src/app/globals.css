@@ -136,8 +136,13 @@ body {
   letter-spacing: -0.003em;
 }
 
-/* Optical hanging para aspas em pull quotes */
-.hang-quote { text-indent: -0.42em; }
+/* Pendurado óptico das aspas: o recuo negativo é compensado por padding de
+   mesma medida, para que a aspa fique pendurada dentro da caixa e não invada
+   a calha do grid. */
+.hang-quote {
+  text-indent: -0.42em;
+  padding-left: 0.42em;
+}
 
 /* ==========================================================================
    GRID EDITORIAL
