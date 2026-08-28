@@ -4,13 +4,55 @@
  * Nada neste arquivo deve ser alterado sem validação da Velmont.
  */
 
+/** Domínio assumido enquanto nenhuma variável de ambiente for definida. */
+const FALLBACK_URL = "https://www.grupovelmont.com";
+
+/**
+ * Resolve a URL canônica do site.
+ *
+ * Precisa ser à prova de variável vazia: `??` só cai no padrão para
+ * null/undefined, e um `NEXT_PUBLIC_SITE_URL=""` definido no painel da
+ * hospedagem derrubava o build inteiro em `new URL("")`.
+ *
+ * Ordem: variável explícita → domínio de produção da Vercel → URL do deploy
+ * (preview) → padrão. Cada candidata é normalizada e validada; a primeira que
+ * produzir uma URL real vence.
+ *
+ * Lida apenas no servidor (metadata, sitemap, robots e JSON-LD), então pode
+ * usar variáveis sem o prefixo NEXT_PUBLIC.
+ */
+function resolveSiteUrl(): string {
+  const candidates = [
+    process.env.NEXT_PUBLIC_SITE_URL,
+    process.env.VERCEL_PROJECT_PRODUCTION_URL,
+    process.env.VERCEL_URL,
+  ];
+
+  for (const candidate of candidates) {
+    const value = candidate?.trim();
+    if (!value) continue;
+
+    // As variáveis da Vercel vêm como host puro, sem protocolo.
+    const withProtocol = /^https?:\/\//i.test(value) ? value : `https://${value}`;
+
+    try {
+      // `origin` descarta caminho, query e barra final — a base precisa ser limpa.
+      return new URL(withProtocol).origin;
+    } catch {
+      // Valor malformado: tenta a próxima candidata em vez de quebrar o build.
+    }
+  }
+
+  return FALLBACK_URL;
+}
+
 export const site = {
   name: "Velmont",
   legalName: "Velmont Marcas e Patentes",
   tagline: "Protegendo ideias, estruturando negócios.",
   taglineEn: "Trusted strategies, proven results.",
-  /** URL de produção — ajuste em NEXT_PUBLIC_SITE_URL quando o domínio for definido. */
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.grupovelmont.com",
+  /** URL de produção — defina NEXT_PUBLIC_SITE_URL com o domínio real. */
+  url: resolveSiteUrl(),
   description:
     "A Velmont atua em propriedade industrial e intelectual, estruturação de empresas e naming. Proteção de marcas, patentes e criações com transparência real sobre etapas, riscos e possibilidades.",
   /** Oficial: "mais de 10 anos de experiência" (Apresentação Velmont 2026, p.2) */

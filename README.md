@@ -138,9 +138,21 @@ cp .env.example .env.local
 
 | Variável | Obrigatória | Uso |
 | --- | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | Não | URL canônica usada em `canonical`, `sitemap.xml`, `robots.txt` e Open Graph. Sem ela, o site assume `https://www.grupovelmont.com`. |
+| `NEXT_PUBLIC_SITE_URL` | Não | URL canônica usada em `canonical`, `sitemap.xml`, `robots.txt`, Open Graph e JSON-LD. |
 
-**Defina esta variável antes do primeiro deploy em produção**, com o domínio real.
+A URL é resolvida nesta ordem, e a primeira candidata válida vence:
+
+1. `NEXT_PUBLIC_SITE_URL`
+2. `VERCEL_PROJECT_PRODUCTION_URL` — domínio de produção, preenchido pela Vercel
+3. `VERCEL_URL` — URL do deploy, usada em previews
+4. `https://www.grupovelmont.com` (padrão)
+
+Valores vazios, só com espaços ou malformados são **ignorados** em vez de quebrar o
+build. Protocolo ausente é completado, e barra final ou caminho são descartados —
+`velmont.com.br/site/` vira `https://velmont.com.br`.
+
+Na Vercel isso significa que **nenhuma configuração é necessária**: produção e previews
+funcionam sozinhos, e a variável só é preciso definir para fixar um domínio próprio.
 Não há chaves, tokens ou credenciais no projeto.
 
 ---
