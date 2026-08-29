@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Hero } from "@/components/sections/Hero";
 import { Manifesto } from "@/components/sections/Manifesto";
-import { Stakes } from "@/components/sections/Stakes";
+import { ExamTable } from "@/components/sections/ExamTable";
 import { ServiceIndex } from "@/components/sections/ServiceIndex";
 import { Transparency } from "@/components/sections/Transparency";
 import { Journey } from "@/components/sections/Journey";
@@ -30,7 +30,7 @@ export default function HomePage() {
     <>
       <Hero />
       <Manifesto />
-      <Stakes />
+      <ExamTable />
 
       {/* 03 — Experiência interativa */}
       <Section id="descubra" index="03" label="Descubra" tone="paper">

@@ -110,21 +110,25 @@ export const journey = [
 export const stakes = [
   {
     n: "01",
+    code: "MARCA · CLASSE",
     title: "O nome",
     text: "O sinal pelo qual o mercado reconhece o negócio. Sem registro, o uso é apenas uso — e uso não é exclusividade.",
   },
   {
     n: "02",
+    code: "PATENTE · SOFTWARE · OBRA",
     title: "A criação",
     text: "Aquilo que a empresa desenvolveu: solução técnica, forma, código, obra. Sem documentação, autoria vira discussão.",
   },
   {
     n: "03",
+    code: "CONTRATO · CESSÃO",
     title: "A titularidade",
     text: "De quem é o que foi criado. Pagar por um trabalho e ser dono dele são fatos que precisam estar escritos.",
   },
   {
     n: "04",
+    code: "GOVERNANÇA",
     title: "A estrutura",
     text: "O que sustenta o crescimento. Um negócio que só funciona por esforço pessoal não é um negócio transferível.",
   },

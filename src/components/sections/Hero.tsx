@@ -1,157 +1,173 @@
+"use client";
+
 import Link from "next/link";
-import { Ridge, Strata } from "@/components/ui/Marks";
-import { Reveal, TextReveal } from "@/components/ui/Reveal";
-import { ButtonLink } from "@/components/ui/Button";
+import { useEffect, useRef, useState } from "react";
 import { site } from "@/content/site";
+import { ButtonLink } from "@/components/ui/Button";
+import { Ficha, FichaField, FichaStatus, Seal } from "@/components/ui/Ficha";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 /**
- * HERO — "Falta estar no nome dela."
+ * HERO — "A EMISSÃO"
  *
- * Direção: declaração editorial em vinho profundo, composição assimétrica,
- * a crista do logotipo desenhando-se no rodapé do bloco. À direita, o índice
- * da página — o gesto que declara, na primeira tela, que isto é uma publicação
- * e um sistema de orientação, não uma landing page.
+ * A manchete não fica ao lado de uma ilustração: ela É o documento. A ficha se
+ * sobrepõe à linha "Falta estar no nome dela", os campos se preenchem em
+ * sequência, o status vira e o lacre desce.
+ *
+ * Em três segundos o usuário vê a promessa acontecer, sem ler uma linha de
+ * explicação — é o que substitui manchete + parágrafo + dois botões.
  */
 
+/** Índice de capítulos como faixa de registro, não como lista de texto. */
 const chapters = [
   { n: "01", label: "Manifesto", href: "#manifesto" },
   { n: "02", label: "O que está em jogo", href: "#em-jogo" },
-  { n: "03", label: "Descubra o que proteger", href: "#descubra" },
+  { n: "03", label: "Descubra", href: "#descubra" },
   { n: "04", label: "Serviços", href: "#servicos" },
   { n: "05", label: "Como pensamos", href: "#transparencia" },
   { n: "06", label: "Quem conduz", href: "#sobre" },
-  { n: "07", label: "Conteúdos", href: "#conhecimento" },
 ];
 
 export function Hero() {
+  const [issued, setIssued] = useState(false);
+  const reduced = useReducedMotion();
+  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  /* Com movimento reduzido o documento já nasce emitido — estado derivado,
+     sem efeito. O ciclo de emissão só existe quando há animação. */
+  const isIssued = reduced || issued;
+
+  useEffect(() => {
+    if (reduced) return;
+
+    const pending = timers.current;
+    // A emissão começa logo após a entrada da tipografia e se repete
+    // discretamente, para quem chegar depois do primeiro ciclo.
+    pending.push(setTimeout(() => setIssued(true), 900));
+
+    const loop = setInterval(() => {
+      setIssued(false);
+      pending.push(setTimeout(() => setIssued(true), 900));
+    }, 9000);
+
+    return () => {
+      clearInterval(loop);
+      pending.forEach(clearTimeout);
+      pending.length = 0;
+    };
+  }, [reduced]);
+
   return (
-    <section className="grain relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-wine-800 text-cream-200 pt-[var(--header-h)]">
-      {/* Campo de luz — o círculo creme da identidade, difuso */}
+    <section className="grain relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-stage pt-[var(--header-h)] text-paper">
+      {/* Luz do palco: o vinho da marca vira iluminação, não parede. */}
       <div
-        className="lightfield pointer-events-none absolute inset-0 -z-10"
-        style={{ "--lf-x": "78%", "--lf-y": "18%", "--lf-strength": "16%" } as React.CSSProperties}
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          background:
+            "radial-gradient(ellipse 68% 58% at 72% 26%, var(--color-wine-800) 0%, transparent 68%)",
+        }}
       />
       <div
-        className="lightfield pointer-events-none absolute inset-0 -z-10"
-        style={{ "--lf-x": "8%", "--lf-y": "92%", "--lf-strength": "10%" } as React.CSSProperties}
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          background:
+            "radial-gradient(ellipse 45% 40% at 12% 92%, var(--color-wine-900) 0%, transparent 70%)",
+        }}
       />
 
-      {/* Estratos — camadas, no canto superior direito */}
-      <Reveal
-        variant="scale"
-        delay={700}
-        className="pointer-events-none absolute -right-16 top-[8vh] -z-10 hidden w-[30vw] max-w-[460px] text-gold-400/14 lg:block"
-      >
-        <Strata corner="tr" lines={11} />
-      </Reveal>
+      <div className="shell flex flex-1 flex-col justify-center py-[clamp(2rem,5vh,4rem)]">
+        <div className="relative">
+          {/* ── Declaração ───────────────────────────────────────── */}
+          <div className="relative z-10 lg:w-[74%]">
+            <div className="mb-[clamp(1.5rem,3vw,2.25rem)] flex items-center gap-4">
+              <span aria-hidden="true" className="h-px w-10 bg-foil/60" />
+              <span className="t-code text-foil">Proteção como estratégia</span>
+            </div>
 
-      <div className="shell flex flex-1 flex-col justify-center py-[clamp(3rem,8vh,7rem)]">
-        <div className="grid gap-x-[clamp(1rem,3vw,4rem)] gap-y-12 lg:grid-cols-12">
-          {/* Declaração */}
-          <div className="lg:col-span-9">
-            <Reveal className="mb-[clamp(1.5rem,3vw,2.5rem)] flex items-center gap-4">
-              <span className="h-px w-10 bg-gold-400/50" aria-hidden="true" />
-              <span className="t-eyebrow text-gold-400">Proteção como estratégia</span>
-            </Reveal>
+            <h1 className="t-display text-[clamp(2.4rem,6.4vw,5.6rem)]">
+              <span className="block">Tudo o que a sua</span>
+              <span className="block">empresa criou já vale.</span>
+              <span className="block">
+                Falta <em className="italic text-paper-2">estar no nome dela.</em>
+              </span>
+            </h1>
 
-            <TextReveal
-              as="h1"
-              className="t-display text-[clamp(2.5rem,6.6vw,5.5rem)]"
-              lines={[
-                <>Tudo o que a sua</>,
-                <>empresa criou já vale.</>,
-                <>
-                  Falta{" "}
-                  <em className="font-normal italic text-cream-300">estar no nome dela.</em>
-                </>,
-              ]}
-              stagger={110}
-              delay={180}
-            />
+            <p className="mt-[clamp(1.75rem,3.5vw,2.5rem)] max-w-[42ch] text-[clamp(1rem,1.05vw,1.125rem)] leading-[1.6] text-paper/65">
+              Marca, invenção, design, software, conteúdo. Patrimônio exige estratégia,
+              segurança jurídica e gestão responsável.
+            </p>
 
-            <Reveal
-              delay={620}
-              className="mt-[clamp(2rem,4vw,3rem)] max-w-[54ch] text-[clamp(1rem,1.05vw,1.1875rem)] leading-[1.68] text-cream-200/72"
-            >
-              <p>
-                Marca, invenção, design, software, conteúdo, método. A Velmont trata o que a sua
-                empresa criou pelo que isso realmente é — patrimônio. E patrimônio exige estratégia,
-                segurança jurídica e gestão responsável.
-              </p>
-            </Reveal>
-
-            <Reveal delay={760} className="mt-[clamp(2.25rem,4vw,3.25rem)] flex flex-wrap gap-4">
+            <div className="mt-[clamp(2rem,3.5vw,2.75rem)] flex flex-wrap items-center gap-x-8 gap-y-4">
               <ButtonLink href="#descubra" variant="cream" magnetic>
                 Descubra o que proteger
               </ButtonLink>
-              <ButtonLink href="/servicos" variant="outline" className="text-cream-200">
+              <Link
+                href="/servicos"
+                className="group t-code inline-flex items-center gap-3 text-paper/55 transition-colors duration-300 hover:text-paper"
+              >
                 Ver serviços
-              </ButtonLink>
-            </Reveal>
+                <span
+                  aria-hidden="true"
+                  className="h-px w-8 bg-current transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-12"
+                />
+              </Link>
+            </div>
           </div>
 
-          {/* Índice da página */}
-          <nav
-            aria-label="Índice desta página"
-            className="hidden lg:col-span-3 lg:col-start-10 lg:block lg:pt-4"
+          {/* ── O documento ──────────────────────────────────────── */}
+          <div
+            data-issued={isIssued ? "" : undefined}
+            className={`group/ficha relative z-20 mt-[clamp(3rem,6vw,4rem)] lg:absolute lg:right-0 lg:top-1/2 lg:mt-0 lg:w-[27rem] lg:-translate-y-[42%] ${
+              isIssued ? "is-issued" : ""
+            }`}
           >
-            <Reveal delay={900}>
-              <h2 className="t-eyebrow mb-6 text-cream-200/40">Nesta página</h2>
-              <ul className="space-y-0">
-                {chapters.map((c) => (
-                  <li key={c.n} className="border-t border-cream-200/12 last:border-b">
-                    <Link
-                      href={c.href}
-                      className="group flex items-baseline gap-4 py-3 transition-colors duration-300"
-                    >
-                      <span className="t-index text-cream-200/35 transition-colors duration-300 group-hover:text-gold-400">
-                        {c.n}
-                      </span>
-                      <span className="text-[0.9375rem] text-cream-200/60 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1 group-hover:text-cream-100">
-                        {c.label}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-6 text-[0.8125rem] leading-relaxed text-cream-200/35">
-                Mais de {site.experienceYears} anos de experiência em propriedade industrial e
-                intelectual, gestão organizacional e jurídica de negócios.
-              </p>
-            </Reveal>
-          </nav>
+            <Ficha
+              code="VLM · REG · 0001"
+              rotate={-1.4}
+              status={<FichaStatus off="Não registrado" on="Registrado" />}
+              className="relative z-10 max-w-[27rem]"
+            >
+              <FichaField label="Titular" value="— sua empresa —" fill={0} />
+              <FichaField label="Ativo" value="Marca, invenção, código, obra" fill={1} />
+              <FichaField label="Depósito" value="2026 · 02 · 18" fill={2} />
+              <FichaField label="Protocolo" value="BR 92 2026 000418 7" fill={3} />
+            </Ficha>
+
+            <Seal className="absolute -bottom-12 right-2 z-20 h-[6.5rem] w-[6.5rem] text-foil lg:-left-12 lg:right-auto" />
+          </div>
         </div>
       </div>
 
-      {/* Crista — a montanha do logotipo, aberta em linha, desenhando-se */}
-      <Reveal
-        variant="up"
-        delay={400}
-        className="pointer-events-none relative mt-auto w-full"
-        distance={0}
-      >
-        <Ridge
-          animated
-          strokeWidth={1}
-          className="h-[clamp(90px,15vw,220px)] w-full text-cream-300/22"
-        />
-      </Reveal>
+      {/* ── Faixa de registro ────────────────────────────────────── */}
+      <div className="relative mt-auto border-t border-paper/10">
+        <div className="shell flex items-center justify-between gap-6 py-4">
+          <nav aria-label="Índice desta página" className="hidden min-w-0 lg:block">
+            <ul className="flex flex-wrap items-center gap-x-7 gap-y-2">
+              {chapters.map((c) => (
+                <li key={c.n}>
+                  <Link
+                    href={c.href}
+                    className="group t-code inline-flex items-baseline gap-2 text-paper/40 transition-colors duration-300 hover:text-paper/85"
+                  >
+                    <span className="text-annot/70 transition-colors duration-300 group-hover:text-foil">
+                      {c.n}
+                    </span>
+                    {c.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
-      <div className="shell relative flex items-center justify-between gap-6 pb-8">
-        <span className="t-index text-cream-200/30">
-          <span className="sm:hidden">Curitiba / PR</span>
-          <span className="hidden sm:inline">Curitiba / PR — Atendimento em todo o Brasil</span>
-        </span>
-        <a
-          href="#manifesto"
-          className="group flex items-center gap-3 text-cream-200/40 transition-colors duration-300 hover:text-cream-200/80"
-        >
-          <span className="t-index">Continue</span>
-          <span
-            aria-hidden="true"
-            className="block h-8 w-px origin-top bg-current transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-y-125"
-          />
-        </a>
+          <span className="t-code shrink-0 text-paper/30">
+            <span className="sm:hidden">Curitiba / PR</span>
+            <span className="hidden sm:inline">
+              Curitiba / PR — {site.experienceYears}+ anos em propriedade industrial
+            </span>
+          </span>
+        </div>
       </div>
     </section>
   );
