@@ -35,7 +35,7 @@ sobre etapas, riscos e possibilidades — em experiência navegável.
 | Framework | **Next.js 16** (App Router) | Rotas estáticas, metadata API, `next/image`, `next/font` |
 | Linguagem | **TypeScript** | Conteúdo tipado — serviços, artigos e diagnóstico são dados, não markup |
 | Estilo | **Tailwind CSS v4** | Tokens centralizados em `@theme`, sem arquivo de configuração JS |
-| Tipografia | Cormorant Garamond + Archivo | Servidas por `next/font/google`, com `display: swap` |
+| Tipografia | Instrument Serif + Instrument Sans + IBM Plex Mono | Três vozes — pensamento, informação e registro |
 | Motion | **CSS + IntersectionObserver** | Nenhuma biblioteca de animação |
 | Ícones/ilustração | SVG próprio | Nenhum pacote de ícones |
 

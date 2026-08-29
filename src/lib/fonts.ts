@@ -1,23 +1,31 @@
-import { Cormorant_Garamond, Archivo } from "next/font/google";
+import { Instrument_Serif, Instrument_Sans, IBM_Plex_Mono } from "next/font/google";
 
 /**
- * Display serif — ecoa o lettering do logotipo Velmont (serifa clássica,
- * alto contraste). Usada em manchetes, manifesto e citações.
+ * SISTEMA TIPOGRÁFICO — três vozes, três funções.
+ * Racional completo em docs/DESIGN-SYSTEM.md.
  */
-export const cormorant = Cormorant_Garamond({
+
+/** PENSAMENTO — manchetes, manifesto, citações. Alto contraste e gume. */
+export const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
   display: "swap",
-  weight: ["300", "400", "500", "600"],
+  weight: "400",
   style: ["normal", "italic"],
-  variable: "--font-cormorant",
+  variable: "--vel-serif",
 });
 
-/**
- * Sans contemporânea — navegação, corpo, rótulos e metadados.
- */
-export const archivo = Archivo({
+/** INFORMAÇÃO — navegação, corpo, rótulos de interface. */
+export const instrumentSans = Instrument_Sans({
   subsets: ["latin"],
   display: "swap",
-  weight: ["300", "400", "500", "600"],
-  variable: "--font-archivo",
+  weight: ["400", "500", "600"],
+  variable: "--vel-sans",
+});
+
+/** REGISTRO — códigos, classes, datas, protocolos e status. */
+export const plexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500"],
+  variable: "--vel-mono",
 });

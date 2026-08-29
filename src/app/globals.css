@@ -7,6 +7,10 @@
    ========================================================================== */
 
 @theme {
+  /* ---- Palco — o vinho levado ao quase-preto. Fundo dominante. -------- */
+  --color-stage: #0b0206;
+  --color-stage-2: #16050c;
+
   /* ---- Vinho — cor primária da marca (amostrada: #2C0413) ------------ */
   --color-wine-950: #150107;
   --color-wine-900: #24030f;
@@ -22,6 +26,21 @@
   --color-cream-200: #efe4d3;
   --color-cream-300: #e9d3b3;
   --color-cream-400: #dcc09a;
+
+  /* ---- Papel — superfície de DOCUMENTO, apoiada sobre o palco.
+         Nunca uma faixa de fundo: sempre com borda, peso e sombra. ------ */
+  --color-paper: #f2eadc;
+  --color-paper-2: #e2d6c0;
+  --color-paper-ink: #12060a;
+  --color-paper-label: #6b5a60;
+
+  /* ---- Lacre — dourado metálico, usado com avareza. ------------------- */
+  --color-foil: #c9a227;
+
+  /* ---- Anotação — neutro FRIO, a voz técnica contra o vinho quente.
+         Cotas, linhas de chamada e códigos sobre o palco. --------------- */
+  --color-annot: #8496a3;
+  --color-annot-dim: #4a5760;
 
   /* ---- Dourado (do lettering do logotipo) ---------------------------- */
   --color-gold-600: #a8813f;
@@ -43,8 +62,9 @@
   --color-ink-100: #ded5d8;
 
   /* ---- Tipografia ----------------------------------------------------- */
-  --font-display: var(--font-cormorant), "Times New Roman", Times, serif;
-  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: var(--vel-serif), "Times New Roman", Times, serif;
+  --font-sans: var(--vel-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: var(--vel-mono), ui-monospace, "SF Mono", Menlo, monospace;
 
   /* ---- Curvas de movimento -------------------------------------------- */
   --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);
@@ -103,8 +123,8 @@ body {
 
 .t-display {
   font-family: var(--font-display);
-  font-weight: 300;
-  line-height: 0.95;
+  font-weight: 400;
+  line-height: 0.94;
   letter-spacing: -0.02em;
   text-wrap: balance;
 }
@@ -118,10 +138,22 @@ body {
 }
 
 .t-index {
-  font-family: var(--font-sans);
+  font-family: var(--font-mono);
   font-size: 0.6875rem;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: 0.14em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* REGISTRO — códigos, classes, datas, protocolos, status.
+   A terceira voz do sistema: é ela que faz o site parecer um
+   sistema proprietário em vez de um folheto. */
+.t-code {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   font-variant-numeric: tabular-nums;
 }
 
@@ -285,4 +317,110 @@ body {
 @keyframes fadeUp {
   from { opacity: 0; transform: translate3d(0, 0.75rem, 0); }
   to { opacity: 1; transform: none; }
+}
+
+/* ==========================================================================
+   OBJETOS — a gramática do registro
+   A ficha substitui o card: barra de cabeçalho com código, campos
+   rotulados e status. Um card genérico poderia ser de qualquer empresa;
+   uma ficha só faz sentido para quem registra coisas.
+   ========================================================================== */
+
+.ficha {
+  background: var(--color-paper);
+  color: var(--color-paper-ink);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 24px 55px -30px rgba(0, 0, 0, 0.95);
+}
+
+.ficha__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 1.05rem;
+  background: var(--color-paper-2);
+  border-bottom: 1px solid rgba(18, 6, 10, 0.16);
+}
+
+.ficha__field {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: 0.35rem 1rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px dotted rgba(18, 6, 10, 0.22);
+}
+
+.ficha__field:last-child {
+  border-bottom: 0;
+}
+
+/* Campo que se preenche na emissão. */
+.ficha__field[data-fill] {
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity 0.5s var(--ease-editorial) var(--fill-delay, 0ms),
+    transform 0.5s var(--ease-editorial) var(--fill-delay, 0ms);
+}
+
+.is-issued .ficha__field[data-fill] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Lacre: desce e assenta ao fim da emissão. */
+.seal {
+  opacity: 0;
+  transform: scale(1.5) rotate(-16deg);
+  transition:
+    opacity 0.35s var(--ease-editorial) var(--seal-delay, 1.25s),
+    transform 0.55s var(--ease-editorial) var(--seal-delay, 1.25s);
+}
+
+.is-issued .seal {
+  opacity: 1;
+  transform: scale(1) rotate(-9deg);
+}
+
+/* Status: vira de não registrado para registrado. */
+.status-flip {
+  position: relative;
+  display: inline-block;
+}
+
+.status-flip > span {
+  display: block;
+  transition:
+    opacity 0.35s var(--ease-editorial) 1.15s,
+    transform 0.45s var(--ease-editorial) 1.15s;
+}
+
+.status-flip .is-off {
+  color: #b4482f;
+}
+
+.status-flip .is-on {
+  position: absolute;
+  inset: 0;
+  color: #4e7d4a;
+  opacity: 0;
+  transform: translateY(60%);
+}
+
+.is-issued .status-flip .is-off {
+  opacity: 0;
+  transform: translateY(-60%);
+}
+
+.is-issued .status-flip .is-on {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ficha__field[data-fill] { opacity: 1 !important; transform: none !important; }
+  .seal { opacity: 1 !important; transform: rotate(-9deg) !important; }
+  .status-flip > span { transition: none !important; }
 }

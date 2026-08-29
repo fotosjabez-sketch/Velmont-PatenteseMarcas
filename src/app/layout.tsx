@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { archivo, cormorant } from "@/lib/fonts";
+import { instrumentSans, instrumentSerif, plexMono } from "@/lib/fonts";
 import { site } from "@/content/site";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -88,7 +88,10 @@ const organizationSchema = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" className={`${cormorant.variable} ${archivo.variable}`}>
+    <html
+      lang="pt-BR"
+      className={`${instrumentSerif.variable} ${instrumentSans.variable} ${plexMono.variable}`}
+    >
       <body className="min-h-dvh antialiased">
         {/* Os blocos com reveal começam invisíveis e são ativados por
             IntersectionObserver. Sem JavaScript não haveria quem os revelasse,

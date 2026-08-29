@@ -52,6 +52,18 @@ um arco de círculo com centro no mesmo vértice. É o recorte circular — as p
 - **Como** sempre em dourado de baixa opacidade (10–25%), atrás do conteúdo.
 - **Nunca** com opacidade alta, nem repetido como padrão de fundo.
 
+### FICHA (`<Ficha />`)
+
+O objeto central da linguagem, e o que substitui o card em todo o site.
+
+- **Significa** o intangível transformado em prova: número, data, classe, titular.
+- **Anatomia** barra de cabeçalho com código de registro e status, corpo com campos
+  rotulados, e — quando o contexto pede — um lacre.
+- **Por quê** um card com ícone e título poderia pertencer a qualquer empresa. Uma ficha
+  de registro só faz sentido para quem cataloga bens intangíveis: o objeto carrega o
+  posicionamento sem precisar escrevê-lo.
+- **Nunca** com raio de borda, sombra difusa ou ícone. É papel, não cartão de interface.
+
 ### CAMPO (`.lightfield`)
 
 Os grandes círculos creme que sangram das bordas na apresentação, aqui difusos em
@@ -73,6 +85,11 @@ Todos os tokens em `src/app/globals.css`, bloco `@theme`.
 
 | Token | Hex | Uso |
 | --- | --- | --- |
+| **`stage`** | **`#0B0206`** | **Palco: o vinho levado ao quase-preto. Fundo dominante.** |
+| `stage-2` | `#16050C` | Painel elevado sobre o palco |
+| `paper` | `#F2EADC` | Superfície de DOCUMENTO — sempre com borda, peso e sombra |
+| `foil` | `#C9A227` | Lacre metálico. Poucas aparições por página |
+| `annot` | `#8496A3` | Neutro **frio**: cotas e linhas técnicas |
 | `wine-950` | `#150107` | Rodapé, campos mais profundos |
 | `wine-900` | `#24030f` | Menu mobile, variação de capa |
 | **`wine-800`** | **`#2c0413`** | **Cor primária — amostrada do material oficial** |
@@ -105,29 +122,45 @@ Auditado com `npm run qa:a11y` — **0 violações WCAG 2.1 AA** em nove rotas.
 
 ## 4. Tipografia
 
+Três vozes, três funções — a separação é a decisão estruturante do sistema.
+
 | Papel | Família | Uso |
 | --- | --- | --- |
-| Display | **Cormorant Garamond** (300–600, itálico) | Manchetes, manifesto, citações, nomes |
-| Sans | **Archivo** (300–600) | Navegação, corpo, rótulos, metadados, UI |
+| **Pensamento** | **Instrument Serif** (400, itálico) | Manchetes, manifesto, citações, nomes |
+| **Informação** | **Instrument Sans** (400–600) | Navegação, corpo, rótulos, UI |
+| **Registro** | **IBM Plex Mono** (400–500) | Códigos, classes, datas, protocolos, status |
 
-A serifa ecoa o lettering do logotipo. A sans dá a temperatura contemporânea que separa
-o site de um escritório jurídico tradicional.
+A serifa tem alto contraste e espacejamento apertado: lê galeria e editorial, não
+cartório. A mono é a voz nova do sistema — é ela que faz o site parecer um sistema
+proprietário em vez de um folheto, e resolve de graça a ausência de microtipografia.
+
+**Por que a Cormorant saiu:** era bonita demais. Dizia hotel boutique e convite de
+casamento, não patrimônio e prova. E nos corpos grandes as hastes finas sumiam — a
+manchete ficava frágil justamente onde precisava ser firme.
 
 ### Classes utilitárias
 
 | Classe | Papel |
 | --- | --- |
-| `.t-display` | Serifa, peso 300, `line-height: 0.95`, `letter-spacing: -0.02em`, `text-wrap: balance` |
+| `.t-display` | Serifa, peso 400, `line-height: 0.94`, `letter-spacing: -0.02em`, `text-wrap: balance` |
 | `.t-eyebrow` | Sans 11px, `tracking: 0.22em`, caixa alta — sobrancelhas |
-| `.t-index` | Sans 11px, `tabular-nums` — numerais do trilho editorial |
+| `.t-index` | Mono 11px, `tabular-nums` — numerais do trilho editorial |
+| `.t-code` | Mono 11px, caixa alta, `tracking: 0.14em` — a voz de registro |
 | `.t-lede` | Parágrafo de abertura, 17–20px |
 | `.t-body` | Corpo, `line-height: 1.72` |
 | `.hang-quote` | Aspa pendurada opticamente em pull quotes |
 
 ### Armadilha registrada: a unidade `ch`
 
-O glifo `0` da Cormorant é estreito: `max-w-[34ch]` em display de 2.5rem rende ~240px,
-não 34 caracteres. **Larguras de texto display usam `em`; corpo em sans pode usar `ch`.**
+O glifo `0` das serifas de alto contraste é estreito: `max-w-[34ch]` em display de
+2.5rem rende ~240px, não 34 caracteres. **Larguras de texto display usam `em`; corpo em
+sans pode usar `ch`.**
+
+### Armadilha registrada: colisão de variáveis de fonte
+
+As variáveis do `next/font` são prefixadas com `--vel-` (`--vel-serif`, `--vel-sans`,
+`--vel-mono`). Nomeá-las `--font-sans` colide com o token do Tailwind e produz
+`--font-sans: var(--font-sans)` — uma referência circular que falha em silêncio.
 
 ---
 
@@ -219,3 +252,27 @@ glassmorphism, gradiente gratuito.
 - Um único `IntersectionObserver` para o documento inteiro
 - Grão de textura em SVG inline como `data:` URI — sem requisição
 - `overflow-x: clip` no `body`, verificado em 390/768/1024/1440px
+
+---
+
+## 10. Os três momentos
+
+O motion não é distribuído por igual: três picos, e o resto em silêncio.
+
+| Momento | Onde | O que acontece |
+| --- | --- | --- |
+| **A emissão** | Hero | A manchete É o documento. Campos se preenchem, status vira de "não registrado" para "registrado", lacre desce. |
+| **A mesa de exame** | `#em-jogo` | Um ativo se decompõe em vista explodida nas camadas que precisam ser protegidas, cada uma com sua classificação. Dirigido pela rolagem, com miolo preso. |
+| **A letra miúda** | Antes do CTA | *(a implementar)* O risco em corpo de display, no campo mais escuro do site. |
+
+### Os quatro verbos do motion
+
+Se um movimento não é um destes, não entra:
+
+1. **Catalogar** — campos se preenchem em sequência
+2. **Lacrar** — o selo desce e assenta
+3. **Decompor** — camadas se separam em vista explodida
+4. **Comparar** — dois documentos se alinham
+
+O `fade-up` universal aplicado a tudo foi justamente o problema anterior: movimento como
+decoração, não como narrativa.
